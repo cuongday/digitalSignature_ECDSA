@@ -89,7 +89,7 @@ class digitalSignature:
         # Calculate s = (k + h * private_key) % p
         s = (k + h * self.private_key)
         print("s_sign: ", s)
-        return R, s
+        return R[0], s
 
     def verify(self, message, signature):
         R, s = signature
