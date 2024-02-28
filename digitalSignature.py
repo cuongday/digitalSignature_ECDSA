@@ -89,7 +89,7 @@ class digitalSignature:
         # Calculate s = (k + h * private_key) % p
         s = (k + h * self.private_key)
         print("s_sign: ", s)
-        return R[0], s
+        return R, s
 
     def verify(self, message, signature):
         R, s = signature
@@ -97,10 +97,10 @@ class digitalSignature:
 
         P1 = self.apply_double_and_add_method(self.base, s)
         P2 = self.point_addition(R, self.apply_double_and_add_method(self.public_key, h))
-        print("P1: ",P1)
-        print("P2: ",P2)
+        print("P1: ", P1)
+        print("P2: ", P2)
         print("R[0]_ve: ", self.public_key)
-        print("s_verify: ",s)
+        print("s_verify: ", s)
         print(self.public_key)
         return P1[0] == P2[0] and P1[1] == P2[1]
 

@@ -199,7 +199,7 @@ class Ui_MainWindow(object):
         message_int = self.ds.text_to_int(message)
         # Tạo chữ ký
         signature = self.ds.sign(message_int)
-
+        # signature_show = signature[0][0], signature[1]
         # Hiển thị chữ ký trong textBrowser_2
         self.textBrowser_3.setText(str(signature))
 
