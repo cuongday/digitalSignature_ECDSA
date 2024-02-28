@@ -4,12 +4,13 @@ import hashlib
 class digitalSignature:
     def __init__(self):
         # Define elliptic curve parameters
-        self.p = pow(2, 255) - 19
+        self.p = 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff
         self.base = (0x6B17D1F2E12C4247F8BCE6E563A440F277037D812DEB33A0F4A13945D898C296,
                      0x4FE342E2FE1A7F9B8EE7EB4A7C0F9E162BCE33576B315ECECBB6406837BF51F5)
         self.a = 0xffffffff00000001000000000000000000000000fffffffffffffffffffffffc
         self.b = 0x5AC635D8AA3A93E7B3EBBD55769886BC651D06B0
-        self.private_key = 16065771662800155919777244270557635166338919379921972017126734669803662752766
+        #self.private_key = 16065771662800155919777244270557635166338919379921972017126734669803662752766
+        self.private_key = random.getrandbits(256)
         self.public_key = self.apply_double_and_add_method(self.base, self.private_key)
 
     def gcd(self, a, b):
@@ -85,23 +86,15 @@ class digitalSignature:
 
         # Calculate h = hash(R_x + public_key_x + message)
         h = self.hashing(R[0] + self.public_key[0] + message) % self.p
-        print("R[0]_sign: ",self.public_key)
         # Calculate s = (k + h * private_key) % p
         s = (k + h * self.private_key)
-        print("s_sign: ", s)
         return R, s
 
     def verify(self, message, signature):
         R, s = signature
         h = self.hashing(R[0] + self.public_key[0] + message) % self.p
-
         P1 = self.apply_double_and_add_method(self.base, s)
         P2 = self.point_addition(R, self.apply_double_and_add_method(self.public_key, h))
-        print("P1: ", P1)
-        print("P2: ", P2)
-        print("R[0]_ve: ", self.public_key)
-        print("s_verify: ", s)
-        print(self.public_key)
         return P1[0] == P2[0] and P1[1] == P2[1]
 
     def text_to_int(self, text):
